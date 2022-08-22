@@ -27,18 +27,36 @@ var connection = mysql.createConnection({
 // connection.end();
 
 // Inserting Data 2
-var person = { 
-	email: faker.internet.email(),
-	created_at: faker.date.past()	
-};
+// var person = { 
+// 	email: faker.internet.email(),
+// 	created_at: faker.date.past()	
+// };
 
-var end_result = connection.query('INSERT INTO users SET ?', person, function(err, result) {
-  if (err) throw err;
-  console.log(result);
+// var end_result = connection.query('INSERT INTO users SET ?', person, function(err, result) {
+//   if (err) throw err;
+//   console.log(result);
+// });
+
+// connection.end();
+
+// Inserting lots of database
+var data = [];
+for (var i = 0; i < 500; i ++) {
+	data.push([
+		faker.internet.email(),
+		faker.date.past()
+	]);
+}
+
+var q = 'INSERT INTO users (email, created_at) VALUES ?';
+
+connection.query(q, [data], function(err, result) {
+  // if (err) throw err;
+	console.log(err);
+	console.log(result);
 });
 
 connection.end();
-
 
 
 // console.log(faker.internet.email());
