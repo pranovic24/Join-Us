@@ -3,6 +3,8 @@ var mysql = require('mysql');
 
 var app = express();
 
+app.set("view engine", "ejs");
+
 var connection = mysql.createConnection({
   host     : 'localhost',
   user     : 'root',
@@ -22,7 +24,8 @@ app.get('/', function(req, res) {
 		if (err) throw err;
 		var count = results[0].count;
 		// Respond with that count
-		res.send("We have " + count + " users in our db");
+		// res.send("We have " + count + " users in our db");
+		res.render("home", {data: count});
 	});
 });
 
@@ -30,11 +33,13 @@ app.get('/joke', function(req, res) {
 	var joke = "<strong>What do you call a dog that does magic tricks?</strong> <em>A labracadabrador</em>.";
 	// console.log("REQUESTED THE JOKE ROUTE!")
 	res.send(joke);
+	// res.render("home");
 });
 
 app.get('/random_num', function(req, res) {
 	var num = Math.floor((Math.random() * 10) + 1);
 	res.send("Your lucky number is " + num);
+	
 })
 
 app.listen(3000, function() {
