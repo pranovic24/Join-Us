@@ -1,9 +1,11 @@
 var express = require('express');
 var mysql = require('mysql');
+var bodyParser = require('body-parser');
 
 var app = express();
 
 app.set("view engine", "ejs");
+app.use(bodyParser.urlencoded({extended: true}));
 
 var connection = mysql.createConnection({
   host     : 'localhost',
@@ -26,6 +28,23 @@ app.get('/', function(req, res) {
 		// Respond with that count
 		// res.send("We have " + count + " users in our db");
 		res.render("home", {data: count});
+	});
+});
+
+app.post('/register', function(req, res) {
+	// a Post route!
+	// console.log("POST REQUEST SENT TO /REGISTER email is " + req.body.email);
+	// console.log(req.body);
+	// var email = req.body.email;
+	var person = { 
+		email: req.body.email
+	};
+	
+	connection.query('INSERT INTO users SET ?', person, function(err, result) {
+		if (err) throw err;
+		// console.log(result);
+		// res.send("Thanks for joining our waitlist!")
+		res.redirect("/");
 	});
 });
 
